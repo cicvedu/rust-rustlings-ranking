@@ -136,7 +136,7 @@ async function getWorksGrade(githubUsername: string, latest: any) {
                 let title = value.replace('pass', '').substring(2).trim();
                 details[title] = true;
             } else if (value.startsWith('❌')) {
-                let title = value.replace(/\s\d+\/\d+/, '').substring(2).trim();
+                let title = value.replace(/\spoints\s\d+\/\d+/, '').substring(2).trim();
                 details[title] = false;
             }
         });
