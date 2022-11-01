@@ -23,14 +23,15 @@ export default function RankPage() {
     getRankingList()
       .then(res => {
         let students: DataType[] = orderBy(res, function(o) {
-          return o.details.default;
-        }, 'asc');
+          return o.grades.default;
+        }, 'desc');
         for(let i = 0; i < students.length; i++) {
           students[i].rank = i + 1;
         }
         return students;
       })
       .then(res => {
+        console.log(res);
         setInitLoading(false);
         setList(res as DataType[]);
       });
