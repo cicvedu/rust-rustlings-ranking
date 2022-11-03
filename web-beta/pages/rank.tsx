@@ -1,8 +1,9 @@
 import { Avatar, List, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getQuestionsLen, getRankingList } from '../requests';
+import { getQuestionsLen, getRankingList, getUpdateTime } from '../requests';
 import styles from '../styles/List.module.css'
 import { orderBy } from 'lodash';
+import dayjs from 'dayjs';
 
 
 interface DataType {
@@ -42,6 +43,11 @@ export default function RankPage() {
 
   return (
     <List
+      header={
+        <div style={{
+          textAlign: 'right'
+        }}>榜单更新时间: <b>{dayjs(getUpdateTime()).format('YYYY-MM-DD HH:mm:ss')}</b></div>
+      }
       className={styles.container}
       loading={initLoading}
       itemLayout="horizontal"

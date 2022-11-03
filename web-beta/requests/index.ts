@@ -12,6 +12,10 @@ export async function getQuestions() {
     return jsonData.questions;
 }
 
+export function getUpdateTime() {
+    return jsonData.latestUpdatedAt;
+}
+
 export async function getQuestionPassRate(questionName: string) {
     let studentNum = jsonData.students.length;
     if(studentNum == 0) return 0;
