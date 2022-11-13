@@ -1,7 +1,13 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import Layout from '@os2edu/layout'
+import Os2edutLayout from '@os2edu/layout'
 import Nav from './nav'
+
+const Layout = dynamic(
+  () => import('@os2edu/layout'),
+  { ssr: false }
+)
 
 const footerStyle: React.CSSProperties = {
   textAlign: 'center',
