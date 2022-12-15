@@ -166,28 +166,32 @@ async function getGrade() {
     })
 
     for(let repo of repos) {
-        // Get the student's github username
-        let githubUsername: string = repo['github_username'];
+        try {
+            // Get the student's github username
+            let githubUsername: string = repo['github_username'];
 
-        // Get userinfo
-        let userInfo = await octokit.request('GET /users/{username}', { username: githubUsername});
+            // Get userinfo
+            let userInfo = await octokit.request('GET /users/{username}', { username: githubUsername});
 
-        // Initialize the student's grade by name
-        grades[githubUsername] = {};
-        
-        // Get the latest grade record file
-        let latest = await getRepoLogFile(githubUsername, 'latest.json');
+            // Initialize the student's grade by name
+            grades[githubUsername] = {};
+            
+            // Get the latest grade record file
+            let latest = await getRepoLogFile(githubUsername, 'latest.json');
 
-        // Store userinfo to json data
-        let [studentGrades, studentGradesDetails] = await getWorksGrade(githubUsername, latest);
-        let student = {
-            name: userInfo['data']['login'],
-            avatar: userInfo['data']['avatar_url'],
-            repo_url: repo['student_repository_url'],
-            grades: studentGrades,
-            details: studentGradesDetails
-        };
-        addStudentInfo(student);
+            // Store userinfo to json data
+            let [studentGrades, studentGradesDetails] = await getWorksGrade(githubUsername, latest);
+            let student = {
+                name: userInfo['data']['login'],
+                avatar: userInfo['data']['avatar_url'],
+                repo_url: repo['student_repository_url'],
+                grades: studentGrades,
+                details: studentGradesDetails
+            };
+            addStudentInfo(student);
+        } catch(e) {
+            continue;
+        }
     }
 }
 
