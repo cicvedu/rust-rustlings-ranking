@@ -172,21 +172,13 @@ async function getGrade() {
 
             // Get userinfo
             let userInfo = await octokit.request('GET /users/{username}', { username: githubUsername});
-
-            // Initialize the student's grade by name
-            grades[githubUsername] = {};
             
-            // Get the latest grade record file
-            let latest = await getRepoLogFile(githubUsername, 'latest.json');
-
-            // Store userinfo to json data
-            let [studentGrades, studentGradesDetails] = await getWorksGrade(githubUsername, latest);
             let student = {
                 name: userInfo['data']['login'],
                 avatar: userInfo['data']['avatar_url'],
                 repo_url: repo['student_repository_url'],
-                grades: studentGrades,
-                details: studentGradesDetails
+                grades: { main: repo['points_awarded'] },
+                details: ""
             };
             addStudentInfo(student);
         } catch(e) {
@@ -198,5 +190,4 @@ async function getGrade() {
 getGrade().then(()=>getApiRemaining()).then(() => {
     // Save json data to file.
     writeFileSync('../web/src/data.json', JSON.stringify(JsonData))
-    writeFileSync('../web-beta/data.json', JSON.stringify(JsonData))
 })

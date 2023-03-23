@@ -2,10 +2,10 @@ import * as dotenv from "dotenv";
 
 export const config = dotenv.config();
 
-export const organiztion: string = 'os2edu';            // 组织
-export const fullOrganization: string = '96758419-rustlings'; // classroom名称
-export const assignment = 'rustlings';   // assignment
-export const works = ['default']; // assignment 的不同情况
+export const organiztion: string = 'learningOS';            // 组织
+export const fullOrganization: string = '19380377-learning-rust'; // classroom名称
+export const assignment = 'rust-rustlings';   // assignment
+export const works = ['main']; // assignment 的不同情况
 export const AUTH_TOKEN = process.env['TOKEN'];
 export const SESSION_TOKEN = process.env['SESSION_TOKEN'];
 

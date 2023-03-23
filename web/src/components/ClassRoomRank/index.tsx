@@ -67,21 +67,6 @@ const ClassRoomRank = (props: IProps) => {
           return <AvatarInfo rank={record.rank} avatarURL={record.avatar} name={text} />
         }
       },
-      {
-        title: '总分',
-        align: 'center',
-        width: 100,
-        fixed: true,
-        dataIndex: 'totalScore',
-        key: '',
-        render(_text, record) {
-          let total = 0;
-          for(let i in record.grades) {
-            total += record.grades[i];
-          }
-          return <span>{total}</span>
-        }
-      },
       ...(props.columns.map((item, index) => {
         return {
           title: item,
