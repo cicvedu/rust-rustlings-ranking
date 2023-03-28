@@ -1,4 +1,4 @@
-import { JsonData, works } from "../config";
+import { JsonData, works } from "../config/";
 
 /**
  * Build a blank grade object but has the work name. 

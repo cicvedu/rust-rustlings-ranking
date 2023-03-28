@@ -1,16 +1,14 @@
 import { Octokit } from "octokit";
 import { assignment, AUTH_TOKEN, fullOrganization, JsonData, organiztion, SESSION_TOKEN, works } from "./config";
 import fetch from "node-fetch";
-import { HttpsProxyAgent } from "https-proxy-agent";
 import { parse } from "csv-parse/sync";
-import { addStudentInfo, buildEmptyGrades, updateAvailable, updateQuestions } from "./utils";
+import { addStudentInfo} from "./utils";
 import { writeFileSync } from 'fs';
+import { initDatabase, shouldUpdateStudent, updateGrades } from "./utils/GradeStorage";
 
 const octokit = new Octokit({
     auth: AUTH_TOKEN
 })
-
-const grades: any = {};
 
 // const proxyAgent = new HttpsProxyAgent('http://172.20.144.1:7890');
 
@@ -101,63 +99,8 @@ async function getApiRemaining() {
 }
 
 /**
- * Get the grade of works and combine them.
- * @param githubUsername The github username of the student who completed the assignment.
- * @param latest The value of the latest.json. It should be a json string.
- * @returns Json object contains work and its points.
+ * get the grade of the student with list of classroom xml
  */
-async function getWorksGrade(githubUsername: string, latest: any) {
-    let grade = buildEmptyGrades();
-    let gradeDetails: any = {};
-    if(!latest) {
-        console.log(`${githubUsername.padEnd(15)} 没有找到latest.json文件   没有分数`);
-        return [grade, gradeDetails];
-    }
-
-    let file = JSON.parse(decodeLogFile(latest));
-    for(let work of works) {
-        // If it not has the log file, then continue.
-        if(!file[work]) continue;
-
-        // Get the value of the work's log file.
-        let logFile = await getRepoLogFile(githubUsername, file[work]);
-        let gradeFile = decodeLogFile(logFile);
-
-        // Handle the result
-        let index = gradeFile.lastIndexOf('Points: ');
-        let pointString = gradeFile.substring(index).replace('Points: ', '');
-        let points = pointString.split('/').map((item: string, _index: number)=>parseFloat(item));
-        
-        // Get Details Grade
-        let gradeDetailsOutput = gradeFile.substring(0, index).trim();
-        let details:any = {};   // details grade
-        gradeDetailsOutput.split('\n').forEach((value: string) => {
-            if(value.startsWith('✅')) {
-                let title = value.replace('pass', '').substring(2).trim();
-                details[title] = true;
-            } else if (value.startsWith('❌')) {
-                let title = value.replace(/\spoints\s\d+\/\d+/, '').substring(2).trim();
-                details[title] = false;
-            }
-        });
-
-        // Update available points by work name.
-        updateAvailable(work, points[1]);
-
-        // Update the list of questions
-        updateQuestions(Object.keys(details));
-
-        // Store grade to points variable.
-        if(work in grade) {
-            grade[work] = points[0];
-            gradeDetails[work] = details;
-        }
-        console.log(`${githubUsername.padEnd(15)} ${points}`)
-    }
-    return [grade, gradeDetails];
-}
-
-
 async function getGrade() {
     let value = await fetchAssignments(fullOrganization, assignment, SESSION_TOKEN ?? "");
 
@@ -187,7 +130,12 @@ async function getGrade() {
     }
 }
 
-getGrade().then(()=>getApiRemaining()).then(() => {
+initDatabase()
+.then(async () => await getGrade())
+.then(async () => await getApiRemaining())
+.then(() => {
+    let t = shouldUpdateStudent("yfblock");
+    console.log(t);
     // Save json data to file.
     writeFileSync('../web/src/data.json', JSON.stringify(JsonData))
 })
