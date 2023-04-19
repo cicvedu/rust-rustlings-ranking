@@ -15,6 +15,7 @@ interface StudentInfo {
   grades: any
   rank?: number
   total?: number
+  lastUpdateAt?: number
 }
 
 interface IProps {
@@ -102,7 +103,7 @@ const ClassRoomRank = (props: IProps) => {
       item['total'] = total;
       return item;
     });
-    let students = orderBy(studentsList, ['total'], 'desc');
+    let students = orderBy(studentsList, ['total', 'lastUpdateAt'], ['desc', 'asc']);
     for(let i = 0; i < students.length; i++) {
       students[i].rank = i + 1;
     }

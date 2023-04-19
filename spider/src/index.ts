@@ -12,7 +12,7 @@ const octokit = new Octokit({
 
 const grades: any = {};
 
-// const proxyAgent = new HttpsProxyAgent('http://172.20.144.1:7890');
+// const proxyAgent = new HttpsProxyAgent('http://127.0.0.1:7890');
 
 /**
  * Get the info of the assignment
@@ -25,6 +25,7 @@ async function fetchAssignments(classroom: string, assigment: string, sessionTok
     return new Promise<string>(async (resolve, reject) => {
         const url = `https://classroom.github.com/classrooms/${classroom}/assignments/${assigment}/download_grades`
         // Send a Get request
+        console.log(`fetch ${url}`);
         const response = await fetch(url, {
             headers: {
             accept:
@@ -159,11 +160,14 @@ async function getWorksGrade(githubUsername: string, latest: any) {
 
 
 async function getGrade() {
+    console.log("start to download grades....");
     let value = await fetchAssignments(fullOrganization, assignment, SESSION_TOKEN ?? "");
 
     let repos = parse(value, {
         columns: true, skip_empty_lines: true, trim: true
     })
+
+    console.log("fetch ok");
 
     for(let repo of repos) {
         try {
@@ -178,8 +182,10 @@ async function getGrade() {
                 avatar: userInfo['data']['avatar_url'],
                 repo_url: repo['student_repository_url'],
                 grades: { main: repo['points_awarded'] },
-                details: ""
+                details: "",
+                lastUpdateAt: new Date(repo['submission_timestamp']).getTime()
             };
+            console.log(student);
             addStudentInfo(student);
         } catch(e) {
             continue;
