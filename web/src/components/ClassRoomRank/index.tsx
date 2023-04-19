@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Table, Modal, Input } from 'antd'
 import dayjs from 'dayjs'
-import { orderBy } from 'lodash'
+import { orderBy, toInteger } from 'lodash'
 import './index.less'
 import Icon from '../Icon'
 import type { ColumnsType } from 'antd/lib/table'
@@ -98,7 +98,7 @@ const ClassRoomRank = (props: IProps) => {
     const studentsList = props.students.map((item, index) => {
       let total = 0;
       for(let i in item.grades) {
-        total += item.grades[i];
+        total += toInteger(item.grades[i]);
       }
       item['total'] = total;
       return item;
