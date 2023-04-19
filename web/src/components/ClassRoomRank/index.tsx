@@ -15,7 +15,7 @@ interface StudentInfo {
   grades: any
   rank?: number
   total?: number
-  lastUpdateAt?: number
+  lastUpdateAt?: number | null
 }
 
 interface IProps {
