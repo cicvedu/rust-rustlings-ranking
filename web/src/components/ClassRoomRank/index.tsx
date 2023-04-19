@@ -85,6 +85,20 @@ const ClassRoomRank = (props: IProps) => {
         }
       }) as ColumnsType<StudentInfo>),
       {
+        title: '最后提交时间',
+        align: 'center',
+        dataIndex: 'lastUpdateAt',
+        fixed: true,
+        key: 'lastUpdateAt',
+        render(text: number | null | undefined, record: StudentInfo) {
+          if(text == null || text == undefined) {
+            return '-';
+          }
+          return dayjs(text).locale("Asia/Beijing").format("YYYY/MM/DD HH:mm");
+          // return <AvatarInfo rank={record.rank} avatarURL={record.avatar} name={text} />
+        }
+      },
+      {
         title: '',
         dataIndex: 'none',
         key: 'none'
