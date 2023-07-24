@@ -52,7 +52,7 @@ async function fetchAssignments(classroom: string, assigment: string, sessionTok
         // If it get the result successfully.
         if (response.ok) {
             const text = await response.text()
-            console.log('classroom response text: ' + text)
+            // console.log('classroom response text: ' + text)
             resolve(text)
         } else {
             reject(`download fail: ${url}`)

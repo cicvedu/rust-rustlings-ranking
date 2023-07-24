@@ -30,6 +30,7 @@ interface IProps {
 const ClassRoomRank = (props: IProps) => {
   const [search, setSearch] = useState("");
   const classroomId = props.refreshKey
+  const isMobile = props.isMobile
   const columns: ColumnsType<StudentInfo> = useMemo(
     () => [
       {
@@ -150,15 +151,29 @@ const ClassRoomRank = (props: IProps) => {
             style = {{width: '20em', marginLeft: '2em'}}
           />
           <div style={{flex: 1}}></div>
-          <span className="update-time" style={{marginRight: '4em'}}>
-              最新数据更新时间:
-              {props.latestUpdatedAt && (
-                <span style={{ marginLeft: 10, fontWeight: 'bold' }}>
-                  {dayjs(props.latestUpdatedAt).format('YYYY-MM-DD HH:mm::ss')}
-                </span>
-              )}
-            </span>
+          { !isMobile ? 
+              <span className="update-time" style={{marginRight: '4em'}}>
+                最新数据更新时间:
+                {props.latestUpdatedAt && (
+                  <span style={{ marginLeft: 10, fontWeight: 'bold' }}>
+                    {dayjs(props.latestUpdatedAt).format('YYYY-MM-DD HH:mm::ss')}
+                  </span>
+                )}
+              </span> : <></>
+          }
         </div>
+        { isMobile ?               
+          <div style={{ alignItems: 'center', paddingLeft: "2em" }}>
+            <span>
+            最新数据更新时间:
+            </span>
+            {props.latestUpdatedAt && (
+              <span style={{ fontWeight: 'bold' }}>
+                {dayjs(props.latestUpdatedAt).format('YYYY-MM-DD HH:mm::ss')}
+              </span>
+            )}
+          </div> : <></>
+          }
         <Table
           className="rank-table"
           scroll={{ x: 1000 }}

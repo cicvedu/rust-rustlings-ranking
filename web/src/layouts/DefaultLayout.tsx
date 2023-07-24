@@ -36,6 +36,7 @@ function App() {
         <Contact isMobile={mobile} />
       </header>
       <ClassRoomRank 
+        isMobile={mobile}
         refreshKey="default"
         columns={Object.keys(jsonData.available)}
         students={jsonData.students}
