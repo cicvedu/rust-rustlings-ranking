@@ -71,7 +71,7 @@ const ClassRoomRank = (props: IProps) => {
       },
       ...(props.columns.map((item, index) => {
         return {
-          title: item,
+          title: item == 'main' ? '总分' : item,
           dataIndex: `assignments-${item}`,
           width: 200,
           align: 'center',
