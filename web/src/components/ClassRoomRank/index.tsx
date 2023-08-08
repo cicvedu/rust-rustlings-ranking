@@ -65,17 +65,19 @@ const ClassRoomRank = (props: IProps) => {
         fixed: true,
         width: 50,
         key: 'repoOwner',
+        colSpan: 0,
         render(text: string, record: StudentInfo) {
           return <AvatarInfo rank={record.rank} avatarURL={record.avatar} name='' />
         }
       },
       {
         title: '学生',
-        align: 'left',
+        align: 'center',
         dataIndex: 'name',
         fixed: true,
         width: 120,
         key: 'repoOwner',
+        colSpan: 2,
         render(text: string, record: StudentInfo) {
           return <AvatarInfo rank={record.rank} avatarURL='' name={text} />
         }
@@ -180,7 +182,7 @@ const ClassRoomRank = (props: IProps) => {
             </span>
             {props.latestUpdatedAt && (
               <span style={{ fontWeight: 'bold' }}>
-                {dayjs(props.latestUpdatedAt).format('YYYY-MM-DD HH:mm::ss')}
+                {dayjs(props.latestUpdatedAt).format('YYYY-MM-DD HH:mm:ss')}
               </span>
             )}
           </div> : <></>
